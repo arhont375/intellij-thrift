@@ -24,4 +24,7 @@ sourceSets {
 
 dependencies {
     implementation project(':jps-plugin')
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$junitVersion")
 }
