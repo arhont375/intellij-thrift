@@ -1,9 +1,9 @@
 package com.intellij.plugins.thrift.inspections;
 
 import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
+import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
 
-abstract public class ThriftInspectionTestBase extends LightJavaCodeInsightFixtureTestCase {
+abstract public class ThriftInspectionTestBase extends ThriftCodeInsightFixtureTestCase {
   private final String myPath;
   Class<? extends LocalInspectionTool>  inspection;
 
