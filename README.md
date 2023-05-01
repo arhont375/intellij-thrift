@@ -1,6 +1,8 @@
 # Thrift Support (fork)
 
-Plugin to support Thrift language in IntelliJ
+Plugin to support Thrift language in IntelliJ IDEs
+
+IDEA marketplace: https://plugins.jetbrains.com/plugin/19912-thrift-support-fork-
 
 ## Why fork?
 
@@ -9,7 +11,7 @@ was forked for publishing and few fixes as I'm using original plugin for develop
 but unfortunately it wasn't receiving compatibility updates recently.
 
 There is no guarantee for current fork to stay long, it's possible that it would be discontinued at the moment
-when development for original plugin would become active again.
+when development of original plugin would become active again.
 
 ## How to build
 
