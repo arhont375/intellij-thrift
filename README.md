@@ -27,5 +27,12 @@ when development for original plugin would become active again.
 
 ## Development
 
+ - General [docs](https://plugins.jetbrains.com/docs/intellij/welcome.html) about plugin development
  - Thrift grammar generated from the [BNF grammar](./thrift/src/main/grammar/Thrift.bnf) using
-the [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit) IDEA plugin.
+the [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit) IDEA plugin. 
+
+### Testing 
+
+```bash
+./gradlew :thrift:test
+```
