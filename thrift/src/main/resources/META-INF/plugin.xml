@@ -99,10 +99,4 @@
       <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
     </action>
   </actions>
-  <project-components>
-    <component>
-      <loadForDefaultProject>true</loadForDefaultProject>
-      <implementation-class>com.intellij.plugins.thrift.config.ThriftPlugin</implementation-class>
-    </component>
-  </project-components>
 </idea-plugin>

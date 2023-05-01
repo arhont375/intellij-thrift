@@ -74,23 +74,22 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
   @Override
   public JComponent createComponent() {
     if (configForm == null) {
-      ThriftPlugin plugin = project.getComponent(ThriftPlugin.class);
-      configForm = new ThriftConfigForm(plugin);
+      configForm = new ThriftConfigForm();
     }
     return configForm;
   }
 
   @Override
-  public void apply() throws ConfigurationException {
+  public void apply() {
     if (configForm != null) {
-      configForm.apply();
+      configForm.apply(project.getService(ThriftPlugin.class));
     }
   }
 
   @Override
   public void reset() {
     if (configForm != null) {
-      configForm.reset();
+      configForm.reset(project.getService(ThriftPlugin.class));
     }
   }
 
@@ -100,8 +99,6 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
   }
 
   private class ThriftConfigForm extends JPanel {
-    private final ThriftPlugin plugin;
-
     private final TextFieldWithBrowseButton tfThriftCompiler;
     private final JCheckBox cbNoWarn = new JCheckBox(ThriftBundle.message("thrift.compiler.option.nowarn"));
     private final JCheckBox cbStrict = new JCheckBox(ThriftBundle.message("thrift.compiler.option.strict"));
@@ -115,10 +112,8 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
     private VirtualFile lastSelectedFile;
 
 
-    private ThriftConfigForm(ThriftPlugin plugin) {
+    private ThriftConfigForm() {
       super(new BorderLayout());
-
-      this.plugin = plugin;
 
       setBorder(IdeBorderFactory.createTitledBorder("Thrift compiler", false));
 
@@ -191,7 +186,7 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
       add(optionsCover, BorderLayout.CENTER);
     }
 
-    void reset() {
+    void reset(ThriftPlugin plugin) {
       ThriftConfig config = plugin.getConfig();
 
       if (config != null) {
@@ -214,7 +209,7 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
       setModified(false);
     }
 
-    void apply() {
+    void apply(ThriftPlugin plugin) {
       final ThriftConfig config = new ThriftConfig(
         StringUtils.trimToNull(tfThriftCompiler.getText()),
         cbNoWarn.isSelected(),
