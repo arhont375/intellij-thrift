@@ -3,7 +3,6 @@ package com.intellij.plugins.thrift.config;
 import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.BaseConfigurable;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -82,14 +81,14 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
   @Override
   public void apply() {
     if (configForm != null) {
-      configForm.apply(project.getService(ThriftPlugin.class));
+      configForm.apply(project.getService(ThriftConfigService.class));
     }
   }
 
   @Override
   public void reset() {
     if (configForm != null) {
-      configForm.reset(project.getService(ThriftPlugin.class));
+      configForm.reset(project.getService(ThriftConfigService.class));
     }
   }
 
@@ -186,7 +185,7 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
       add(optionsCover, BorderLayout.CENTER);
     }
 
-    void reset(ThriftPlugin plugin) {
+    void reset(ThriftConfigService plugin) {
       ThriftConfig config = plugin.getConfig();
 
       if (config != null) {
@@ -209,7 +208,7 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
       setModified(false);
     }
 
-    void apply(ThriftPlugin plugin) {
+    void apply(ThriftConfigService plugin) {
       final ThriftConfig config = new ThriftConfig(
         StringUtils.trimToNull(tfThriftCompiler.getText()),
         cbNoWarn.isSelected(),

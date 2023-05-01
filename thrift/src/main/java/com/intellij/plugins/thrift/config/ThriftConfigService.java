@@ -5,7 +5,6 @@ import com.intellij.plugins.thrift.jps.ThriftProjectExtensionSerializer;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
   }
 )
 @Service
-public final class ThriftPlugin implements PersistentStateComponent<Element> {
+public final class ThriftConfigService implements PersistentStateComponent<Element> {
   private ThriftConfig myConfig;
 
   @Nullable
