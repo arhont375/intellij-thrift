@@ -9,7 +9,8 @@
   </description>
   <change-notes>
     <![CDATA[
-      IntelliJ 2023.1 Support
+      - Remove hard dependency on Scala plugin
+      - Make plugin reloadable
     ]]>
   </change-notes>
   <vendor>@arhont375</vendor>
