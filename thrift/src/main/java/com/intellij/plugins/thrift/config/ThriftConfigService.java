@@ -5,7 +5,6 @@ import com.intellij.plugins.thrift.jps.ThriftProjectExtensionSerializer;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
     @Storage(ThriftProjectExtensionSerializer.CONFIG_FILE_NAME)
   }
 )
-public class ThriftPlugin implements NamedComponent, PersistentStateComponent<Element> {
+@Service
+public final class ThriftConfigService implements PersistentStateComponent<Element> {
   private ThriftConfig myConfig;
 
   @Nullable
@@ -68,12 +68,6 @@ public class ThriftPlugin implements NamedComponent, PersistentStateComponent<El
         }
       }
     }
-  }
-
-  @NotNull
-  @Override
-  public String getComponentName() {
-    return "Thrift";
   }
 
   public void setConfig(ThriftConfig config) {
