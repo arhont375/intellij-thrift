@@ -11,6 +11,7 @@
     <![CDATA[
       - Remove hard dependency on Scala plugin
       - Make plugin reloadable
+      - Add java jump thrift
     ]]>
   </change-notes>
   <vendor>@arhont375</vendor>
