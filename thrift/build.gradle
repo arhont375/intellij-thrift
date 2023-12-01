@@ -9,8 +9,8 @@ publishPlugin {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 sourceSets {
@@ -24,6 +24,7 @@ sourceSets {
 
 dependencies {
     implementation project(':jps-plugin')
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")

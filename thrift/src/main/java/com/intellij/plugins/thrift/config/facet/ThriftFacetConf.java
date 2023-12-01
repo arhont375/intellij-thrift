@@ -27,7 +27,7 @@ import com.intellij.plugins.thrift.config.target.GeneratorType;
 import com.intellij.ui.*;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.util.ui.UIUtil;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
