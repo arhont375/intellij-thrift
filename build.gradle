@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id "org.jetbrains.intellij" version "1.16.1" apply false
+    id "org.jetbrains.intellij" version "1.17.3" apply false
 }
 
 subprojects {
