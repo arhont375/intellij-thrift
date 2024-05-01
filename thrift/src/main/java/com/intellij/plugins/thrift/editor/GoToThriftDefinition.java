@@ -3,6 +3,7 @@ package com.intellij.plugins.thrift.editor;
 import com.google.common.base.Stopwatch;
 import com.intellij.codeInsight.navigation.PsiTargetNavigator;
 import com.intellij.codeInsight.navigation.impl.PsiTargetPresentationRenderer;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -118,5 +119,10 @@ public class GoToThriftDefinition extends AnAction {
       logger.warn("GoToThriftDefinition action update took " + time.toMillis() + "ms");
     }
     p.setEnabledAndVisible(enabled);
+  }
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.EDT;
   }
 }
