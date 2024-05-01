@@ -1,7 +1,7 @@
 jar.archiveFileName = "plugin.jar"
 
 patchPluginXml {
-    version = System.getenv().getOrDefault("GITHUB_REF_NAME", "1.1.1")
+    version = System.getenv().getOrDefault("GITHUB_REF_NAME", "1.8.1")
 }
 
 publishPlugin {
