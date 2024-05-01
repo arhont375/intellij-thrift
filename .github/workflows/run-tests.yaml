@@ -11,6 +11,8 @@ permissions:
 
 env:
   java_version: '17'
+  java_distribution: 'temurin'
+  java_package_manager: 'gradle'
 
 jobs:
   test:
@@ -21,8 +23,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.java_version }}
-          distribution: 'temurin'
-          cache: 'gradle'
+          distribution: ${{ env.java_distribution }}
+          cache: ${{ env.java_package_manager }}
       - name: Run tests
         run: ./gradlew test
 
@@ -37,8 +39,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.java_version }}
-          distribution: 'temurin'
-          cache: 'gradle'
+          distribution: ${{ env.java_distribution }}
+          cache: ${{ env.java_package_manager }}
       - name: Publish plugin
         run: ./gradlew :thrift:publishPlugin
         env:
