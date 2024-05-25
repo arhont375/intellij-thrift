@@ -108,8 +108,6 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
     private final JCheckBox cbAllow64bitConsts = new JCheckBox(ThriftBundle.message("thrift.compiler.option.allow-64bit-consts"));
 
     private final JButton bCheckVersion = new JButton();
-    private VirtualFile lastSelectedFile;
-
 
     private ThriftConfigForm() {
       super(new BorderLayout());
@@ -119,16 +117,9 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
       tfThriftCompiler = new TextFieldWithBrowseButton(new JBTextField());
       tfThriftCompiler.addBrowseFolderListener(
         new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor(), project) {
-          @Nullable
-          @Override
-          protected VirtualFile getInitialFile() {
-            return lastSelectedFile;
-          }
-
           @Override
           protected void onFileChosen(@NotNull VirtualFile chosenFile) {
-            lastSelectedFile = chosenFile;
-            final String absolutePath = VfsUtil.virtualToIoFile(lastSelectedFile).getAbsolutePath();
+            final String absolutePath = VfsUtil.virtualToIoFile(chosenFile).getAbsolutePath();
             tfThriftCompiler.setText(absolutePath);
             final Task.Modal checkTask = new ThriftVersionChecker(absolutePath);
 
@@ -192,7 +183,6 @@ public class ThriftCompilerConfigurable extends BaseConfigurable implements Sear
         final String path = StringUtils.defaultIfEmpty(config.getCompilerPath(), DEFAULT_COMPILER_NAME);
 
         tfThriftCompiler.setText(path);
-        lastSelectedFile = LocalFileSystem.getInstance().findFileByPath(path);
         cbNoWarn.setSelected(config.isNoWarn());
         cbStrict.setSelected(config.isStrict());
         cbVerbose.setSelected(config.isVerbose());
