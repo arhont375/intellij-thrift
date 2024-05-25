@@ -44,22 +44,8 @@ public class ThriftConfig extends JpsElementBase<ThriftConfig> {
     myAllow64bitConsts = consts;
   }
 
-  public VirtualFile getCompilerFile() {
-    return VirtualFileManager.getInstance().findFileByUrl(compilerPath);
-  }
-
   public String getCompilerPath() {
     return compilerPath;
-  }
-
-  @NotNull
-  @Override
-  public ThriftConfig createCopy() {
-    return new ThriftConfig(compilerPath, myNoWarn, myStrict, myVerbose, myRecurse, myDebug, myAllowNegKeys, myAllow64bitConsts);
-  }
-
-  @Override
-  public void applyChanges(@NotNull ThriftConfig modified) {
   }
 
   public static ThriftConfig getSettings(JpsProject project) {

@@ -57,36 +57,6 @@ public class ThriftCompilerOptions extends JpsElementBase<ThriftCompilerOptions>
     this.cleanOutput = cleanOutput;
   }
 
-  @NotNull
-  @Override
-  public ThriftCompilerOptions createCopy() {
-    final ThriftCompilerOptions s = new ThriftCompilerOptions();
-    final List<Generator> list = s.generators;
-    list.clear();
-    try {
-      for (Generator g : generators) {
-        list.add(g.clone());
-      }
-    }
-    catch (CloneNotSupportedException e) {
-      throw new RuntimeException("Failed to clone generator settings");
-    }
-    s.includes.clear();
-    s.includes.addAll(includes);
-    s.cleanOutput = cleanOutput;
-    return s;
-  }
-
-  @Override
-  public void applyChanges(@NotNull ThriftCompilerOptions modified) {
-    generators.clear();
-    includes.clear();
-    cleanOutput = modified.cleanOutput;
-
-    generators.addAll(modified.generators);
-    includes.addAll(modified.includes);
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

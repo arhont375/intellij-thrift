@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
     @Storage(ThriftProjectExtensionSerializer.CONFIG_FILE_NAME)
   }
 )
-@Service
+@Service(Service.Level.PROJECT)
 public final class ThriftConfigService implements PersistentStateComponent<Element> {
   private ThriftConfig myConfig;
 
