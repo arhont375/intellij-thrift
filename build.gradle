@@ -3,6 +3,14 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     id "org.jetbrains.intellij" version "1.17.3" apply false
+    id 'idea'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 subprojects {

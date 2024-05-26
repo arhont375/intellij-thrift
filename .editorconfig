@@ -17,3 +17,6 @@ ij_smart_tabs = false
 ij_visual_guides = 120
 ij_wrap_on_typing = false
 ij_java_use_single_class_imports = true
+ij_java_names_count_to_use_import_on_demand = 99999
+ij_java_class_count_to_use_import_on_demand = 99999
+ij_java_packages_to_use_import_on_demand = unset
