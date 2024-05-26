@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class ThriftContext extends TemplateContextType {
 
   protected ThriftContext() {
-    super("THRIFT", "Thrift");
+    super("Thrift");
   }
 
   @Override
