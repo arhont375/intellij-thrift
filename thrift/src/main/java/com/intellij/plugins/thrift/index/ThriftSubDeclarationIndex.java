@@ -10,32 +10,34 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Processor;
-import com.intellij.util.indexing.*;
+import com.intellij.util.indexing.DataIndexer;
+import com.intellij.util.indexing.FileBasedIndex;
+import com.intellij.util.indexing.FileBasedIndexExtension;
+import com.intellij.util.indexing.FileContent;
+import com.intellij.util.indexing.ID;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by fkorotkov.
  */
 public class ThriftSubDeclarationIndex extends FileBasedIndexExtension<String, String> {
   public static final ID<String, String> THRIFT_DECLARATION_INDEX = ID.create("ThriftSubDeclarationIndex");
-  private final EnumeratorStringDescriptor myKeyDescriptor = new EnumeratorStringDescriptor();
-  private final FileBasedIndex.InputFilter myFilter = new FileBasedIndex.InputFilter() {
-    @Override
-    public boolean acceptInput(VirtualFile file) {
-      return file.getFileType() == ThriftFileType.INSTANCE;
-    }
-  };
+
   private static final ThriftSubDeclarationIndex.MyIndexer myIndexer = new MyIndexer();
+
+  private final EnumeratorStringDescriptor myKeyDescriptor = new EnumeratorStringDescriptor();
+  private final FileBasedIndex.InputFilter myFilter = file -> file.getFileType() == ThriftFileType.INSTANCE;
 
   @NotNull
   @Override
@@ -80,16 +82,16 @@ public class ThriftSubDeclarationIndex extends FileBasedIndexExtension<String, S
   public static List<String> findAllKeys(Project project, GlobalSearchScope scope) {
     final List<String> result = new ArrayList<String>();
     FileBasedIndex.getInstance().processAllKeys(
-      THRIFT_DECLARATION_INDEX,
-      new Processor<String>() {
-        @Override
-        public boolean process(String name) {
-          result.add(name);
-          return true;
-        }
-      },
-      scope,
-      null
+        THRIFT_DECLARATION_INDEX,
+        new Processor<String>() {
+          @Override
+          public boolean process(String name) {
+            result.add(name);
+            return true;
+          }
+        },
+        scope,
+        null
     );
     return result;
   }
@@ -101,32 +103,32 @@ public class ThriftSubDeclarationIndex extends FileBasedIndexExtension<String, S
     final List<ThriftDeclaration> result = new ArrayList<ThriftDeclaration>();
     final PsiManager manager = PsiManager.getInstance(project);
     FileBasedIndex.getInstance().getFilesWithKey(
-      THRIFT_DECLARATION_INDEX,
-      Collections.singleton(name),
-      new Processor<VirtualFile>() {
-        @Override
-        public boolean process(VirtualFile file) {
-          PsiFile psiFile = manager.findFile(file);
-          if (psiFile != null) {
-            for (PsiElement child : psiFile.getChildren()) {
-              if (!(child instanceof ThriftTopLevelDeclaration)) {
-                continue;
-              }
-              if (className != null && !className.equals(((ThriftTopLevelDeclaration)child).getName())) {
-                continue;
-              }
-              for (ThriftDeclaration declaration : ((ThriftTopLevelDeclaration)child).findSubDeclarations()) {
-                String subName = declaration.getName();
-                if (subName != null && name.equals(subName)) {
-                  result.add(declaration);
+        THRIFT_DECLARATION_INDEX,
+        Collections.singleton(name),
+        new Processor<VirtualFile>() {
+          @Override
+          public boolean process(VirtualFile file) {
+            PsiFile psiFile = manager.findFile(file);
+            if (psiFile != null) {
+              for (PsiElement child : psiFile.getChildren()) {
+                if (!(child instanceof ThriftTopLevelDeclaration)) {
+                  continue;
+                }
+                if (className != null && !className.equals(((ThriftTopLevelDeclaration) child).getName())) {
+                  continue;
+                }
+                for (ThriftDeclaration declaration : ((ThriftTopLevelDeclaration) child).findSubDeclarations()) {
+                  String subName = declaration.getName();
+                  if (name.equals(subName)) {
+                    result.add(declaration);
+                  }
                 }
               }
             }
+            return true;
           }
-          return true;
-        }
-      },
-      scope
+        },
+        scope
     );
     return result;
   }
@@ -135,12 +137,12 @@ public class ThriftSubDeclarationIndex extends FileBasedIndexExtension<String, S
     @NotNull
     @Override
     public Map<String, String> map(FileContent inputData) {
-      Map<String, String> result = new THashMap<String, String>();
+      final Map<String, String> result = new HashMap<>();
       for (PsiElement child : inputData.getPsiFile().getChildren()) {
         if (child instanceof ThriftTopLevelDeclaration) {
-          String topLevelName = ((ThriftTopLevelDeclaration)child).getName();
+          String topLevelName = ((ThriftTopLevelDeclaration) child).getName();
           if (topLevelName != null) {
-            for (ThriftDeclaration declaration : ((ThriftTopLevelDeclaration)child).findSubDeclarations()) {
+            for (ThriftDeclaration declaration : ((ThriftTopLevelDeclaration) child).findSubDeclarations()) {
               String subName = declaration.getName();
               if (subName != null) {
                 result.put(subName, topLevelName);
