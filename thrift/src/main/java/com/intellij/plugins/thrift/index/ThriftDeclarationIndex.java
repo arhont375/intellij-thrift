@@ -13,11 +13,11 @@ import com.intellij.util.Processor;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
-import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,14 +26,11 @@ import java.util.Map;
  */
 public class ThriftDeclarationIndex extends ScalarIndexExtension<String> {
   public static final ID<String, Void> THRIFT_DECLARATION_INDEX = ID.create("ThriftDeclarationIndex");
-  private final EnumeratorStringDescriptor myKeyDescriptor = new EnumeratorStringDescriptor();
-  private final FileBasedIndex.InputFilter myFilter = new FileBasedIndex.InputFilter() {
-    @Override
-    public boolean acceptInput(VirtualFile file) {
-      return file.getFileType() == ThriftFileType.INSTANCE;
-    }
-  };
+
   private static final ThriftDeclarationIndex.MyIndexer myIndexer = new MyIndexer();
+
+  private final EnumeratorStringDescriptor myKeyDescriptor = new EnumeratorStringDescriptor();
+  private final FileBasedIndex.InputFilter myFilter = file -> file.getFileType() == ThriftFileType.INSTANCE;
 
   @NotNull
   @Override
@@ -115,7 +112,7 @@ public class ThriftDeclarationIndex extends ScalarIndexExtension<String> {
     @NotNull
     @Override
     public Map<String, Void> map(FileContent inputData) {
-      Map<String, Void> result = new THashMap<String, Void>();
+      final Map<String, Void> result = new HashMap<>();
       for (PsiElement child : inputData.getPsiFile().getChildren()) {
         if (child instanceof ThriftTopLevelDeclaration) {
           String name = ((ThriftDeclaration)child).getName();

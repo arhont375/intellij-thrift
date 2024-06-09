@@ -4,7 +4,6 @@ import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.ChooseByNameRegistry;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -168,7 +167,7 @@ public class ThriftPsiUtil {
 
   public static void processImplementations(ThriftDefinitionName definitionName, @NotNull Processor<NavigatablePsiElement> processor) {
     String name = definitionName.getText();
-    for (ChooseByNameContributor contributor : ChooseByNameRegistry.getInstance().getClassModelContributors()) {
+    for (ChooseByNameContributor contributor : ChooseByNameRegistry.getInstance().getClassModelContributorList()) {
       if (!(contributor instanceof ThriftClassContributor)) {
         for (NavigationItem navigationItem : contributor.getItemsByName(name, name, definitionName.getProject(), false)) {
           if (navigationItem instanceof NavigatablePsiElement && !processor.process((NavigatablePsiElement)navigationItem)) {

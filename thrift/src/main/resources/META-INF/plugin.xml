@@ -13,7 +13,6 @@
     ]]>
   </change-notes>
   <vendor>@arhont375</vendor>
-  <idea-version since-build="212.4746.92"/><!-- Will be patched by the patchPluginXml task -->
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.lang</depends>
@@ -52,7 +51,7 @@
     <lang.commenter language="thrift" implementationClass="com.intellij.plugins.thrift.ThriftCommenter"/>
     <lang.implementationTextSelectioner language="thrift"
                                         implementationClass="com.intellij.plugins.thrift.ThriftImplementationTextSelectioner"/>
-    <liveTemplateContext implementation="com.intellij.plugins.thrift.ThriftContext"/>
+    <liveTemplateContext implementation="com.intellij.plugins.thrift.ThriftContext" contextId="THRIFT"/>
 
     <!--<colorSettingsPage/>-->
     <!--<codeStyleSettingsProvider/>-->
