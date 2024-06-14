@@ -20,6 +20,13 @@ sourceSets {
 
 val junitVersion: String by project
 
+repositories {
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
 dependencies {
     implementation(project(":jps-plugin"))
     implementation("org.apache.commons:commons-lang3:3.14.0")

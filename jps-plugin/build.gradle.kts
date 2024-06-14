@@ -14,6 +14,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+repositories {
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
 dependencies {
     intellijPlatform {
         intellijIdeaCommunity(project.property("ideaVersion") as String)
