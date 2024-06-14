@@ -23,6 +23,7 @@ import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import icons.ThriftIcons;
+import jdk.internal.joptsimple.internal.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

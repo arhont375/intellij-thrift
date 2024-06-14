@@ -1,10 +1,8 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.intellij.IntelliJPluginExtension
-import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 
 plugins {
-    id("org.jetbrains.intellij") version "1.17.3" apply false
+    id("org.jetbrains.intellij.platform") version "2.0.0-beta6"
     id("java")
     id("idea")
 }
@@ -17,14 +15,18 @@ idea {
 }
 
 allprojects {
+    apply(plugin = "org.jetbrains.intellij.platform")
+
     repositories {
         mavenCentral()
+        intellijPlatform {
+            defaultRepositories()
+        }
     }
 }
 
 subprojects {
     apply(plugin = "java")
-    apply(plugin = "org.jetbrains.intellij")
 
     java {
         toolchain {
@@ -47,13 +49,9 @@ subprojects {
         }
     }
 
-    extensions.configure<IntelliJPluginExtension> {
-        version.set(project.property("ideaVersion") as String)
-        plugins.set(listOf("copyright", "java"))
-        downloadSources.set(true)
-    }
-
-    tasks.withType<BuildSearchableOptionsTask> {
-        enabled = false
+    dependencies {
+        intellijPlatform {
+            intellijIdeaCommunity(project.property("ideaVersion") as String)
+        }
     }
 }
