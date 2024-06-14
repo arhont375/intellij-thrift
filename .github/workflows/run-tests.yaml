@@ -1,8 +1,10 @@
 name: Run tests with Gradle
 
 on:  
-  push:
   pull_request:
+    branches:
+      - develop
+  push:
     branches:
       - develop
 
