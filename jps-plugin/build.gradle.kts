@@ -1,6 +1,6 @@
 plugins {
+    id("org.jetbrains.intellij.platform")
     id("java")
-    id("org.jetbrains.intellij")
 }
 
 tasks {
@@ -12,4 +12,16 @@ tasks {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity(project.property("ideaVersion") as String)
+        bundledPlugins("com.intellij.java")
+        instrumentationTools()
+    }
+}
+
+intellijPlatform {
+    buildSearchableOptions = false
 }
