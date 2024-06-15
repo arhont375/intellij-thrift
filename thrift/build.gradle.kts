@@ -7,7 +7,7 @@ plugins {
 
 tasks {
     jar {
-        archiveFileName = "thrift-jps.jar"
+        archiveFileName = "plugin.jar"
     }
 }
 
@@ -50,9 +50,12 @@ intellijPlatform {
 
     pluginConfiguration {
         version = System.getenv()["GITHUB_REF_NAME"] ?: "1.1.1"
+        id = "thrift-syntax-fork"
 
         ideaVersion {
             sinceBuild = project.property("ideaSinceVersion") as String
+            // Unset untilBuild version to declare compatibility outside of current major version
+            untilBuild = provider { null }
         }
     }
 
