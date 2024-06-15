@@ -1,10 +1,9 @@
 <idea-plugin>
-  <id>com.intellij.plugins.thrift</id>
   <name>Thrift Support (fork)</name>
   <description><![CDATA[
     Support for Thrift language.
     <p>
-    This is the fork of <a href="https://plugins.jetbrains.com/plugin/7331-thrift-support">original Thrift plugin developed by @fkorotkov</a>.
+    This is the fork of the <a href="https://plugins.jetbrains.com/plugin/7331-thrift-support">original Thrift plugin developed by @fkorotkov</a>.
     ]]>
   </description>
   <change-notes>
