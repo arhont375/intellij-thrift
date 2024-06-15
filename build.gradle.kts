@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.0.0-beta6" apply false
+    id("org.jetbrains.intellij.platform") version "2.0.0-beta7" apply false
     id("java")
     id("idea")
 }
@@ -19,7 +19,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 
