@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test --no-daemon
   publish:
     needs:
       - test
@@ -38,6 +38,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Publish plugin
-        run: ./gradlew :thrift:publishPlugin
+        run: ./gradlew :thrift:publishPlugin --no-daemon
         env:
           JETBRAINS_TOKEN: ${{ secrets.JETBRAINS_TOKEN }}        
