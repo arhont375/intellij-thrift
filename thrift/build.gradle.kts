@@ -1,5 +1,4 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import kotlin.math.sin
 
 plugins {
     id("org.jetbrains.intellij.platform")
