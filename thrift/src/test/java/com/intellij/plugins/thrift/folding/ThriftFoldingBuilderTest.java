@@ -16,7 +16,6 @@ public class ThriftFoldingBuilderTest extends ThriftCodeInsightFixtureTestCase {
     myFixture.testFolding(getTestDataPath() + "/" + file);
   }
 
-  @Test
   public void testFoldingOnce() throws Throwable {
     doTest();
   }

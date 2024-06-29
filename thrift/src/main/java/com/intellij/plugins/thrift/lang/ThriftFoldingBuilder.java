@@ -80,23 +80,23 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       super.visitElement(element);
 
       if (element instanceof ThriftEnum) {
-        this.visitThriftEnum((ThriftEnum) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftSenum) {
-        this.visitThriftSenum((ThriftSenum) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftStruct) {
-        this.visitThriftStruct((ThriftStruct) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftUnion) {
-        this.visitThriftUnion((ThriftUnion) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftException) {
-        this.visitThriftException((ThriftException) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftService) {
-        this.visitThriftService((ThriftService) element);
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftXsdAttrs) {
-        this.visitThriftXsdAttrs((ThriftXsdAttrs) element);
+        this.visitElementWithCurlyBraceChildren(element);
+      } else if (element instanceof ThriftConstMap) {
+        this.visitElementWithCurlyBraceChildren(element);
       } else if (element instanceof ThriftConstList) {
         this.visitThriftConstList((ThriftConstList) element);
-      } else if (element instanceof ThriftConstMap) {
-        this.visitThriftConstMap((ThriftConstMap) element);
       } else if (isOfThriftElementType(element.getNode().getElementType(), BLOCKCOMMENT)) {
         this.visitThriftBlockComment(element.getNode());
       }
@@ -118,38 +118,6 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       if (beg < children.length && end >= 0) {
         this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[beg].getStartOffset(), children[end].getStartOffset() + 1)));
       }
-    }
-
-    private void visitThriftEnum(ThriftEnum element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftSenum(ThriftSenum element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftStruct(ThriftStruct element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftUnion(ThriftUnion element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftException(ThriftException element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftService(ThriftService element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftXsdAttrs(ThriftXsdAttrs element) {
-      this.visitElementWithCurlyBraceChildren(element);
-    }
-
-    private void visitThriftConstMap(ThriftConstMap element) {
-      this.visitElementWithCurlyBraceChildren(element);
     }
 
     private void visitThriftConstList(ThriftConstList element) {
