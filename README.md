@@ -28,7 +28,7 @@ updates. Feel free to open PR for any new feature or update of functionality.
  - General [docs](https://plugins.jetbrains.com/docs/intellij/welcome.html) about plugin development
  - Thrift grammar generated from the [BNF grammar](./thrift/src/main/grammar/Thrift.bnf) using
 the [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit) IDEA plugin. 
- - [IDEA platform plugin referenve](https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html)
+ - [IDEA platform plugin reference](https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html)
 
 ### Testing 
 
