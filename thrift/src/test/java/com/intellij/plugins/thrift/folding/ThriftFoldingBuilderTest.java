@@ -1,7 +1,6 @@
 package com.intellij.plugins.thrift.folding;
 
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
-import org.junit.jupiter.api.Test;
 
 public class ThriftFoldingBuilderTest extends ThriftCodeInsightFixtureTestCase {
   @Override

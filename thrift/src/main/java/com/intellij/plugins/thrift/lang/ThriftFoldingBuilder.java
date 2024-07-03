@@ -7,9 +7,11 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.plugins.thrift.lang.lexer.ThriftElementType;
-import com.intellij.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.plugins.thrift.lang.psi.*;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiRecursiveVisitor;
+import com.intellij.psi.PsiWalkingState;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +70,10 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
     return false;
   }
 
-  static class ThriftFoldingRecursiveElementWalkingVisitor extends JavaRecursiveElementWalkingVisitor {
+  static class ThriftFoldingRecursiveElementWalkingVisitor extends PsiElementVisitor implements PsiRecursiveVisitor {
+    private final PsiWalkingState myWalkingState = new PsiWalkingState(this) {
+    };
+
     private final List<FoldingDescriptor> descriptors;
 
     public ThriftFoldingRecursiveElementWalkingVisitor(List<FoldingDescriptor> descriptors) {
@@ -77,7 +82,7 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
 
     @Override
     public void visitElement(@NotNull PsiElement element) {
-      super.visitElement(element);
+      myWalkingState.elementStarted(element);
 
       if (element instanceof ThriftEnum) {
         this.visitElementWithCurlyBraceChildren(element);
