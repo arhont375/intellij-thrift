@@ -54,6 +54,8 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       placeholderText = "[...]";
     } else if (isOfThriftElementType(node.getElementType(), BLOCKCOMMENT)) {
       placeholderText = "/*...*/";
+    } else if (psiElement instanceof ThriftTypeAnnotations) {
+      placeholderText = "(...)";
     }
     return placeholderText;
   }
@@ -85,56 +87,40 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       myWalkingState.elementStarted(element);
 
       if (element instanceof ThriftEnum) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftSenum) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftStruct) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftUnion) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftException) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftService) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftXsdAttrs) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftConstMap) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftConstList) {
-        this.visitThriftConstList((ThriftConstList) element);
+        this.visitElementWithBraceChildren(element, LEFTBRACKET, RIGHTBRACKET);
       } else if (isOfThriftElementType(element.getNode().getElementType(), BLOCKCOMMENT)) {
         this.visitThriftBlockComment(element.getNode());
+      } else if (element instanceof ThriftTypeAnnotations) {
+        this.visitThriftTypeAnnotations((ThriftTypeAnnotations) element);
       }
     }
 
-    private void visitElementWithCurlyBraceChildren(PsiElement element) {
+    private void visitElementWithBraceChildren(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
       ASTNode[] children = element.getNode().getChildren(null);
       int beg, end;
       for (beg = 0; beg < children.length; beg++) {
-        if (isOfThriftElementType(children[beg].getElementType(), LEFTCURLYBRACE)) {
+        if (isOfThriftElementType(children[beg].getElementType(), leftBrace)) {
           break;
         }
       }
       for (end = children.length - 1; end >= 0; end--) {
-        if (isOfThriftElementType(children[end].getElementType(), RIGHTCURLYBRACE)) {
-          break;
-        }
-      }
-      if (beg < children.length && end >= 0) {
-        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[beg].getStartOffset(), children[end].getStartOffset() + 1)));
-      }
-    }
-
-    private void visitThriftConstList(ThriftConstList element) {
-      ASTNode[] children = element.getNode().getChildren(null);
-      int beg, end;
-      for (beg = 0; beg < children.length; beg++) {
-        if (isOfThriftElementType(children[beg].getElementType(), LEFTBRACKET)) {
-          break;
-        }
-      }
-      for (end = children.length - 1; end >= 0; end--) {
-        if (isOfThriftElementType(children[end].getElementType(), RIGHTBRACKET)) {
+        if (isOfThriftElementType(children[end].getElementType(), rightBrace)) {
           break;
         }
       }
@@ -146,6 +132,16 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
     private void visitThriftBlockComment(ASTNode node) {
       this.descriptors.add(new FoldingDescriptor(node,
           new TextRange(node.getStartOffset(), node.getStartOffset() + node.getTextLength())));
+    }
+
+    private static final int BIG_BLOCK_LENGTH = 1200;
+
+    private void visitThriftTypeAnnotations(ThriftTypeAnnotations element) {
+      // keep small and one-line annotation
+      if (element.getTextLength() < BIG_BLOCK_LENGTH && !element.getText().contains("\n")) {
+        return;
+      }
+      this.visitElementWithBraceChildren(element, LEFTBRACE, RIGHTBRACE);
     }
   }
 }
