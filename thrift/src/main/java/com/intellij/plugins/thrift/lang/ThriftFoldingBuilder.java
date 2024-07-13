@@ -13,6 +13,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiRecursiveVisitor;
 import com.intellij.psi.PsiWalkingState;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.IntPair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,10 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
     } else if (isOfThriftElementType(node.getElementType(), BLOCKCOMMENT)) {
       placeholderText = "/*...*/";
     } else if (psiElement instanceof ThriftTypeAnnotations) {
+      placeholderText = "(...)";
+    } else if (psiElement instanceof ThriftFunction) {
+      placeholderText = "(...)";
+    } else if (psiElement instanceof ThriftThrows) {
       placeholderText = "(...)";
     }
     return placeholderText;
@@ -108,10 +113,14 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
         this.visitThriftBlockComment(element.getNode());
       } else if (element instanceof ThriftTypeAnnotations) {
         this.visitThriftTypeAnnotations((ThriftTypeAnnotations) element);
+      } else if (element instanceof ThriftFunction) {
+        visitFieldsWithBraceRecovery(element);
+      } else if (element instanceof ThriftThrows) {
+        visitFieldsWithBraceRecovery(element);
       }
     }
 
-    private void visitElementWithBraceChildren(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
+    private static IntPair findIndexesOfBrace(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
       ASTNode[] children = element.getNode().getChildren(null);
       int beg, end;
       for (beg = 0; beg < children.length; beg++) {
@@ -124,8 +133,14 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
           break;
         }
       }
-      if (beg < children.length && end >= 0) {
-        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[beg].getStartOffset(), children[end].getStartOffset() + 1)));
+      return new IntPair(beg, end);
+    }
+
+    private void visitElementWithBraceChildren(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
+      IntPair indexRange = findIndexesOfBrace(element, leftBrace, rightBrace);
+      ASTNode[] children = element.getNode().getChildren(null);
+      if (indexRange.first < children.length && indexRange.second >= 0) {
+        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[indexRange.first].getStartOffset(), children[indexRange.second].getStartOffset() + 1)));
       }
     }
 
@@ -134,7 +149,7 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
           new TextRange(node.getStartOffset(), node.getStartOffset() + node.getTextLength())));
     }
 
-    private static final int BIG_BLOCK_LENGTH = 1200;
+    private static final int BIG_BLOCK_LENGTH = 120;
 
     private void visitThriftTypeAnnotations(ThriftTypeAnnotations element) {
       // keep small and one-line annotation
@@ -142,6 +157,25 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
         return;
       }
       this.visitElementWithBraceChildren(element, LEFTBRACE, RIGHTBRACE);
+    }
+
+    private void visitFieldsWithBraceRecovery(PsiElement element) {
+      IntPair indexRange = findIndexesOfBrace(element, LEFTBRACE, RIGHTBRACE);
+      ASTNode[] children = element.getNode().getChildren(null);
+      if (indexRange.first >= children.length || indexRange.second < 0) {
+        return;
+      }
+      FoldingDescriptor fd = new FoldingDescriptor(element, new TextRange(children[indexRange.first].getStartOffset(), children[indexRange.second].getStartOffset() + 1));
+      if (fd.getRange().getLength() >= BIG_BLOCK_LENGTH) {
+        this.descriptors.add(fd);
+        return;
+      }
+      for (int i = indexRange.first + 1; i < indexRange.second; i++) {
+        if (children[i].getText().contains("\n")) {
+          this.descriptors.add(fd);
+          return;
+        }
+      }
     }
   }
 }
