@@ -39,8 +39,7 @@ public class ThriftDefinitionNameImpl extends ThriftPsiCompositeElementImpl impl
   }
 
   @Override
-  @NonNls
-  public @Nullable String getName() {
+  public @Nullable @NonNls String getName() {
     return ThriftPsiUtil.getName(this);
   }
 

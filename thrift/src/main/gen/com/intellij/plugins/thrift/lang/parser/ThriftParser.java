@@ -863,7 +863,7 @@ public class ThriftParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Identifier ('=' Literal ListSeparator?)?
+  // Identifier ('=' Literal)? ListSeparator?
   public static boolean TypeAnnotation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeAnnotation")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -871,31 +871,31 @@ public class ThriftParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     r = r && TypeAnnotation_1(b, l + 1);
+    r = r && TypeAnnotation_2(b, l + 1);
     exit_section_(b, m, TYPE_ANNOTATION, r);
     return r;
   }
 
-  // ('=' Literal ListSeparator?)?
+  // ('=' Literal)?
   private static boolean TypeAnnotation_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeAnnotation_1")) return false;
     TypeAnnotation_1_0(b, l + 1);
     return true;
   }
 
-  // '=' Literal ListSeparator?
+  // '=' Literal
   private static boolean TypeAnnotation_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeAnnotation_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, EQUALS, LITERAL);
-    r = r && TypeAnnotation_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // ListSeparator?
-  private static boolean TypeAnnotation_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeAnnotation_1_0_2")) return false;
+  private static boolean TypeAnnotation_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeAnnotation_2")) return false;
     ListSeparator(b, l + 1);
     return true;
   }

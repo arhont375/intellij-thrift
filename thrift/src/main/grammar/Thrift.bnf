@@ -163,6 +163,6 @@ ListSeparator   ::=  ',' | ';'
 
 TypeAnnotations ::= '(' TypeAnnotationList ')'
 TypeAnnotationList ::= TypeAnnotation* {recoverWhile=braceRecovery}
-TypeAnnotation ::= Identifier ('=' Literal ListSeparator?)?
+TypeAnnotation ::= Identifier ('=' Literal)? ListSeparator?
 
 private braceRecovery ::= !(')')
