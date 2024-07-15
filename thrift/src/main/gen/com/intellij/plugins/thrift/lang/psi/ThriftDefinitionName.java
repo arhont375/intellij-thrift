@@ -15,8 +15,7 @@ public interface ThriftDefinitionName extends PsiNamedElement, NavigationItem, P
 
   @NotNull PsiElement setName(String name);
 
-  @NonNls
-  @Nullable String getName();
+  @Nullable @NonNls String getName();
 
   @NotNull PsiElement getNameIdentifier();
 

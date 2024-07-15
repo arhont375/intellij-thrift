@@ -22,4 +22,8 @@ public class ThriftFoldingBuilderTest extends ThriftCodeInsightFixtureTestCase {
   public void testFoldingTwice() throws Throwable {
     doTest();
   }
+
+  public void testFoldingAnnotation() throws Throwable {
+    doTest();
+  }
 }

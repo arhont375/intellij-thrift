@@ -13,6 +13,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiRecursiveVisitor;
 import com.intellij.psi.PsiWalkingState;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.IntPair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,12 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       placeholderText = "[...]";
     } else if (isOfThriftElementType(node.getElementType(), BLOCKCOMMENT)) {
       placeholderText = "/*...*/";
+    } else if (psiElement instanceof ThriftTypeAnnotations) {
+      placeholderText = "(...)";
+    } else if (psiElement instanceof ThriftFunction) {
+      placeholderText = "(...)";
+    } else if (psiElement instanceof ThriftThrows) {
+      placeholderText = "(...)";
     }
     return placeholderText;
   }
@@ -85,67 +92,90 @@ public class ThriftFoldingBuilder extends FoldingBuilderEx implements DumbAware 
       myWalkingState.elementStarted(element);
 
       if (element instanceof ThriftEnum) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftSenum) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftStruct) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftUnion) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftException) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftService) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftXsdAttrs) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftConstMap) {
-        this.visitElementWithCurlyBraceChildren(element);
+        this.visitElementWithBraceChildren(element, LEFTCURLYBRACE, RIGHTCURLYBRACE);
       } else if (element instanceof ThriftConstList) {
-        this.visitThriftConstList((ThriftConstList) element);
+        this.visitElementWithBraceChildren(element, LEFTBRACKET, RIGHTBRACKET);
       } else if (isOfThriftElementType(element.getNode().getElementType(), BLOCKCOMMENT)) {
         this.visitThriftBlockComment(element.getNode());
+      } else if (element instanceof ThriftTypeAnnotations) {
+        this.visitThriftTypeAnnotations((ThriftTypeAnnotations) element);
+      } else if (element instanceof ThriftFunction) {
+        visitFieldsWithBraceRecovery(element);
+      } else if (element instanceof ThriftThrows) {
+        visitFieldsWithBraceRecovery(element);
       }
     }
 
-    private void visitElementWithCurlyBraceChildren(PsiElement element) {
+    private static IntPair findIndexesOfBrace(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
       ASTNode[] children = element.getNode().getChildren(null);
       int beg, end;
       for (beg = 0; beg < children.length; beg++) {
-        if (isOfThriftElementType(children[beg].getElementType(), LEFTCURLYBRACE)) {
+        if (isOfThriftElementType(children[beg].getElementType(), leftBrace)) {
           break;
         }
       }
       for (end = children.length - 1; end >= 0; end--) {
-        if (isOfThriftElementType(children[end].getElementType(), RIGHTCURLYBRACE)) {
+        if (isOfThriftElementType(children[end].getElementType(), rightBrace)) {
           break;
         }
       }
-      if (beg < children.length && end >= 0) {
-        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[beg].getStartOffset(), children[end].getStartOffset() + 1)));
-      }
+      return new IntPair(beg, end);
     }
 
-    private void visitThriftConstList(ThriftConstList element) {
+    private void visitElementWithBraceChildren(PsiElement element, IElementType leftBrace, IElementType rightBrace) {
+      IntPair indexRange = findIndexesOfBrace(element, leftBrace, rightBrace);
       ASTNode[] children = element.getNode().getChildren(null);
-      int beg, end;
-      for (beg = 0; beg < children.length; beg++) {
-        if (isOfThriftElementType(children[beg].getElementType(), LEFTBRACKET)) {
-          break;
-        }
-      }
-      for (end = children.length - 1; end >= 0; end--) {
-        if (isOfThriftElementType(children[end].getElementType(), RIGHTBRACKET)) {
-          break;
-        }
-      }
-      if (beg < children.length && end >= 0) {
-        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[beg].getStartOffset(), children[end].getStartOffset() + 1)));
+      if (indexRange.first < children.length && indexRange.second >= 0) {
+        this.descriptors.add(new FoldingDescriptor(element, new TextRange(children[indexRange.first].getStartOffset(), children[indexRange.second].getStartOffset() + 1)));
       }
     }
 
     private void visitThriftBlockComment(ASTNode node) {
       this.descriptors.add(new FoldingDescriptor(node,
           new TextRange(node.getStartOffset(), node.getStartOffset() + node.getTextLength())));
+    }
+
+    private static final int BIG_BLOCK_LENGTH = 120;
+
+    private void visitThriftTypeAnnotations(ThriftTypeAnnotations element) {
+      // keep small and one-line annotation
+      if (element.getTextLength() < BIG_BLOCK_LENGTH && !element.getText().contains("\n")) {
+        return;
+      }
+      this.visitElementWithBraceChildren(element, LEFTBRACE, RIGHTBRACE);
+    }
+
+    private void visitFieldsWithBraceRecovery(PsiElement element) {
+      IntPair indexRange = findIndexesOfBrace(element, LEFTBRACE, RIGHTBRACE);
+      ASTNode[] children = element.getNode().getChildren(null);
+      if (indexRange.first >= children.length || indexRange.second < 0) {
+        return;
+      }
+      FoldingDescriptor fd = new FoldingDescriptor(element, new TextRange(children[indexRange.first].getStartOffset(), children[indexRange.second].getStartOffset() + 1));
+      if (fd.getRange().getLength() >= BIG_BLOCK_LENGTH) {
+        this.descriptors.add(fd);
+        return;
+      }
+      for (int i = indexRange.first + 1; i < indexRange.second; i++) {
+        if (children[i].getText().contains("\n")) {
+          this.descriptors.add(fd);
+          return;
+        }
+      }
     }
   }
 }
