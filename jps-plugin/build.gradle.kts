@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity(project.property("ideaVersion") as String)
+        create(project.property("ideaVersion") as String)
         bundledPlugins("com.intellij.java")
         instrumentationTools()
     }

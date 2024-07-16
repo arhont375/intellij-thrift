@@ -1,4 +1,6 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 
 plugins {
     id("org.jetbrains.intellij.platform")
@@ -35,7 +37,7 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$junitVersion")
 
     intellijPlatform {
-        intellijIdeaCommunity(project.property("ideaVersion") as String)
+        create(project.property("ideaVersion") as String)
         bundledPlugins("com.intellij.java")
         instrumentationTools()
 
@@ -60,4 +62,12 @@ intellijPlatform {
     }
 
     buildSearchableOptions = false
+}
+
+tasks {
+    printProductsReleases {
+        channels = listOf(ProductRelease.Channel.EAP)
+        types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
+        untilBuild = provider { null }
+    }
 }
