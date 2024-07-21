@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.0.0-beta9" apply false
+    id("org.jetbrains.intellij.platform") version "2.0.0-RC1" apply false
     id("java")
     id("idea")
 }
