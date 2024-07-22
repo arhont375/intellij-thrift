@@ -5,9 +5,12 @@ import com.intellij.openapi.util.text.CharFilter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
-import com.intellij.testFramework.UsefulTestCase;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by fkorotkov.
@@ -31,23 +34,24 @@ abstract public class ThriftCompletionTestBase extends ThriftCodeInsightFixtureT
   }
 
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return myPath;
   }
 
   protected void doTest() throws Throwable {
-    myFixture.configureByFile(getTestName(true) + ".thrift");
+    getFixture().configureByFile(getTestName(true) + ".thrift");
     doTestVariantsInner(getTestName(true) + ".txt");
   }
 
   protected void doTest(char charToType) {
-    myFixture.configureByFile(getTestName(true) + ".thrift");
-    myFixture.type(charToType);
-    myFixture.checkResultByFile(getTestName(true) + ".txt");
+    getFixture().configureByFile(getTestName(true) + ".thrift");
+    getFixture().type(charToType);
+    getFixture().checkResultByFile(getTestName(true) + ".txt");
   }
 
   protected void doTestVariantsInner(String fileName) throws Throwable {
-    final VirtualFile virtualFile = myFixture.copyFileToProject(fileName);
+    final VirtualFile virtualFile = getFixture().copyFileToProject(fileName);
     final Scanner in = new Scanner(virtualFile.getInputStream());
 
     final CompletionType type = CompletionType.valueOf(in.next());
@@ -62,7 +66,7 @@ abstract public class ThriftCompletionTestBase extends ThriftCodeInsightFixtureT
       }
     }
 
-    myFixture.complete(type, count);
+    getFixture().complete(type, count);
     checkCompletion(checkType, variants);
   }
 
@@ -71,21 +75,21 @@ abstract public class ThriftCompletionTestBase extends ThriftCodeInsightFixtureT
   }
 
   protected void checkCompletion(CheckType checkType, List<String> variants) {
-    List<String> stringList = myFixture.getLookupElementStrings();
+    List<String> stringList = getFixture().getLookupElementStrings();
     if (stringList == null) {
       stringList = Collections.emptyList();
     }
 
     if (checkType == CheckType.EQUALS) {
-      UsefulTestCase.assertSameElements(stringList, variants);
+      assertThat(stringList).containsExactlyElementsOf(variants);
     }
     else if (checkType == CheckType.INCLUDES) {
       variants.removeAll(stringList);
-      assertTrue("Missing variants: " + variants, variants.isEmpty());
+      assertTrue(variants.isEmpty(), "Missing variants: " + variants);
     }
     else if (checkType == CheckType.EXCLUDES) {
       variants.retainAll(stringList);
-      assertTrue("Unexpected variants: " + variants, variants.isEmpty());
+      assertTrue(variants.isEmpty(), "Unexpected variants: " + variants);
     }
   }
 }

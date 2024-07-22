@@ -2,6 +2,7 @@ package com.intellij.plugins.thrift.inspections;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
 abstract public class ThriftInspectionTestBase extends ThriftCodeInsightFixtureTestCase {
   private final String myPath;
@@ -22,15 +23,16 @@ abstract public class ThriftInspectionTestBase extends ThriftCodeInsightFixtureT
   }
 
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return myPath;
   }
 
   @SuppressWarnings("unchecked")
   protected void doTest() {
-    myFixture.enableInspections(this.inspection);
-    myFixture.configureByFile(getTestName(true) + ".thrift");
-    myFixture.checkHighlighting();
+    getFixture().enableInspections(this.inspection);
+    getFixture().configureByFile(getTestName(true) + ".thrift");
+    getFixture().checkHighlighting();
   }
 
 }
