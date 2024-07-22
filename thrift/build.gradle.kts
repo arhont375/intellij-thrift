@@ -32,9 +32,10 @@ dependencies {
     implementation(project(":jps-plugin"))
     implementation("org.apache.commons:commons-lang3:3.14.0")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$junitVersion")
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 
     intellijPlatform {
         create(project.property("ideaVersion") as String)

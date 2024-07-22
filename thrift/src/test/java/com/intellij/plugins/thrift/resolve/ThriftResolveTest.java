@@ -6,64 +6,76 @@ import com.intellij.plugins.thrift.ThriftFileType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.testFramework.EdtTestUtil;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Created by fkorotkov.
  */
 public class ThriftResolveTest extends ThriftCodeInsightFixtureTestCase {
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return "resolve";
   }
 
   protected Collection<PsiElement> doTest(int expectedSize) {
-    PsiFile file = myFixture.getFile();
-    assertNotNull(file);
-    PsiReference reference = file.findReferenceAt(myFixture.getCaretOffset());
-    assertNotNull("no reference", reference);
-    final Collection<PsiElement> elements = TargetElementUtil.getInstance().getTargetCandidates(reference);
+    PsiReference reference = getFixture().getReferenceAtCaretPosition();
+    assertNotNull(reference, "no reference");
+    final Collection<PsiElement> elements = EdtTestUtil.runInEdtAndGet(() -> TargetElementUtil.getInstance().getTargetCandidates(reference));
     assertNotNull(elements);
     assertEquals(expectedSize, elements.size());
     return elements;
   }
 
   private void configureDefault() {
-    myFixture.configureByFile(getTestName(true) + "." + ThriftFileType.DEFAULT_EXTENSION);
+    getFixture().configureByFile(getTestName(true) + "." + ThriftFileType.DEFAULT_EXTENSION);
   }
 
+  @Test
   public void testInclude() {
-    myFixture.addFileToProject("foo.thrift", "");
-    myFixture.configureByText(ThriftFileType.INSTANCE, "include 'foo<caret>.thrift'");
+    getFixture().addFileToProject("foo.thrift", "");
+    getFixture().configureByText(ThriftFileType.INSTANCE, "include 'foo<caret>.thrift'");
     doTest(1);
   }
 
+  @Test
   public void testGlobalType1() {
-    myFixture.addFileToProject("data.thrift", "struct Impression {}");
+    getFixture().addFileToProject("data.thrift", "struct Impression {}");
     configureDefault();
     doTest(1);
   }
 
+  @Test
   public void testGlobalType2() {
-    myFixture.addFileToProject("util/data.thrift", "struct Impression {}");
+    getFixture().addFileToProject("util/data.thrift", "struct Impression {}");
     configureDefault();
     doTest(1);
   }
 
+  @Test
   public void testGlobalType3() {
-    myFixture.addFileToProject("util/data.thrift", "struct Impression {}");
+    getFixture().addFileToProject("util/data.thrift", "struct Impression {}");
     configureDefault();
     Collection<PsiElement> elements = doTest(1);
-    assertInstanceOf(elements.iterator().next(), PsiFile.class);
+    assertInstanceOf(PsiFile.class, elements.iterator().next());
   }
 
+  @Test
   public void testGlobalType4() {
-    myFixture.addFileToProject("data.thrift", "struct Impression {}");
+    getFixture().addFileToProject("data.thrift", "struct Impression {}");
     configureDefault();
     doTest(1);
   }
 
+  @Test
   public void testLocalType() {
     configureDefault();
     doTest(1);
