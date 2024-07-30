@@ -6,11 +6,6 @@
     This is the fork of the <a href="https://plugins.jetbrains.com/plugin/7331-thrift-support">original Thrift plugin developed by @fkorotkov</a>.
     ]]>
   </description>
-  <change-notes>
-    <![CDATA[
-      IntelliJ 2024.1 Support
-    ]]>
-  </change-notes>
   <vendor>@arhont375</vendor>
 
   <depends>com.intellij.modules.platform</depends>

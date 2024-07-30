@@ -48,14 +48,23 @@ dependencies {
     }
 }
 
+
 intellijPlatform {
+    val gitTag = System.getenv()["GITHUB_REF_NAME"] ?: ""
+
     publishing {
         token = System.getenv()["JETBRAINS_TOKEN"] ?: ""
+        if (gitTag.endsWith("-eap")) {
+            channels.set(listOf("eap"))
+        }
     }
 
     pluginConfiguration {
-        version = System.getenv()["GITHUB_REF_NAME"] ?: "1.1.1"
+        version = gitTag
         id = "thrift-syntax-fork"
+        changeNotes = """
+            2024.2 EAP support
+        """.trimIndent()
 
         ideaVersion {
             sinceBuild = project.property("ideaSinceVersion") as String
