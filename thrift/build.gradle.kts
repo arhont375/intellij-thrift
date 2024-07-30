@@ -32,6 +32,8 @@ dependencies {
     implementation(project(":jps-plugin"))
     implementation("org.apache.commons:commons-lang3:3.14.0")
 
+    // Only for the ThriftParserTest
+    testImplementation("junit:junit:4.13.1")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
