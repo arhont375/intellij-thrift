@@ -19,22 +19,22 @@ import com.intellij.plugins.thrift.ThriftFileType;
 import com.intellij.plugins.thrift.util.ThriftTestUtils;
 import com.intellij.testFramework.ParsingTestCase;
 
-public class ThriftParserTest /*extends ParsingTestCase*/ {
+public class ThriftParserTest extends ParsingTestCase {
   public ThriftParserTest() {
-//    super("parser", ThriftFileType.DEFAULT_EXTENSION, new ThriftParserDefinition());
+    super("parser", ThriftFileType.DEFAULT_EXTENSION, new ThriftParserDefinition());
   }
 
-//  @Override
+  @Override
   protected String getTestDataPath() {
     return ThriftTestUtils.BASE_TEST_DATA_PATH;
   }
 
-//  @Override
+  @Override
   protected boolean skipSpaces() {
     return true;
   }
 
   public void testThrift() {
-//    doTest(true);
+    doTest(true);
   }
 }
