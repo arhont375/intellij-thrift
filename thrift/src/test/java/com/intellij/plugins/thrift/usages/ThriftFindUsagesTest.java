@@ -1,46 +1,48 @@
 package com.intellij.plugins.thrift.usages;
 
-import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usages.PsiElementUsageTarget;
-import com.intellij.usages.UsageTarget;
-import com.intellij.usages.UsageTargetUtil;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.plugins.thrift.ThriftFileType;
+import com.intellij.usages.Usage;
+import org.awaitility.Awaitility;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ThriftFindUsagesTest extends ThriftCodeInsightFixtureTestCase {
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return "usages";
   }
 
+  @BeforeEach
+  void setUp() {
+    getFixture().configureByFile(getTestName(true) + "." + ThriftFileType.DEFAULT_EXTENSION);
+  }
 
   protected void doTest(int size) throws Throwable {
-    myFixture.configureByFile(getTestName(true) + ".thrift");
-    final Collection<UsageInfo> elements = findUsages();
-    assertNotNull(elements);
-    assertEquals(size, elements.size());
+    Awaitility
+        .await()
+        .atMost(Duration.ofSeconds(10))
+        .untilAsserted(() -> {
+          final Collection<Usage> elements = getFixture().testFindUsagesUsingAction();
+          assertNotNull(elements);
+          assertEquals(size, elements.size());
+        });
   }
 
-  private Collection<UsageInfo> findUsages() throws Throwable {
-    final UsageTarget[] targets = UsageTargetUtil.findUsageTargets(new DataProvider() {
-      @Override
-      public Object getData(@NonNls String dataId) {
-        return ((EditorEx)myFixture.getEditor()).getDataContext().getData(dataId);
-      }
-    });
-
-    assert targets != null && targets.length > 0 && targets[0] instanceof PsiElementUsageTarget;
-    return myFixture.findUsages(((PsiElementUsageTarget)targets[0]).getElement());
-  }
-
+  @Test
   public void testUsages1() throws Throwable {
     doTest(2);
   }
 
+  @Test
   public void testUsages2() throws Throwable {
     doTest(2);
   }

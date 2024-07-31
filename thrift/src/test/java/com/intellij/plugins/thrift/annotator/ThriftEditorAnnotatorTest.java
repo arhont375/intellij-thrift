@@ -1,15 +1,19 @@
 package com.intellij.plugins.thrift.annotator;
 
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
 
 public class ThriftEditorAnnotatorTest extends ThriftCodeInsightFixtureTestCase {
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return "annotator";
   }
 
+  @Test
   public void testTypeIsNotException(){
-    myFixture.configureByFiles( "TypeIsNotException.thrift");
-    myFixture.checkHighlighting(false, false, true);
+    getFixture().configureByFiles( "TypeIsNotException.thrift");
+    getFixture().checkHighlighting(false, false, true);
   }
 }

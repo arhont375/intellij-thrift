@@ -2,38 +2,44 @@ package com.intellij.plugins.thrift.completion;
 
 import com.intellij.plugins.thrift.ThriftCodeInsightFixtureTestCase;
 import com.intellij.plugins.thrift.ThriftFileType;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by fkorotkov.
  */
 public class ThriftEditorCompletionTest extends ThriftCodeInsightFixtureTestCase {
   @Override
-  protected String getBasePath() {
+  @NotNull
+  protected String getRelativePath() {
     return "completion/editor";
   }
 
+  @Test
   public void testTypeParam(){
-    myFixture.configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<caret>}");
-    myFixture.type('<');
-    myFixture.checkResult("struct Foo {1: list<<caret>>}");
+    getFixture().configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<caret>}");
+    getFixture().type('<');
+    getFixture().checkResult("struct Foo {1: list<<caret>>}");
   }
 
+  @Test
   public void testExistingClosingBrace1(){
-    myFixture.configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<Foo<caret>>}");
-    myFixture.type('>');
-    myFixture.checkResult("struct Foo {1: list<Foo><caret>}");
+    getFixture().configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<Foo<caret>>}");
+    getFixture().type('>');
+    getFixture().checkResult("struct Foo {1: list<Foo><caret>}");
   }
 
+  @Test
   public void testExistingClosingBrace2(){
-    myFixture.configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<Foo<caret>> list}");
-    myFixture.type('>');
-    myFixture.checkResult("struct Foo {1: list<Foo><caret> list}");
+    getFixture().configureByText(ThriftFileType.INSTANCE, "struct Foo {1: list<Foo<caret>> list}");
+    getFixture().type('>');
+    getFixture().checkResult("struct Foo {1: list<Foo><caret> list}");
   }
 
-  // todo: ignored for now since it stopped working in 2021.2
-  private void _testExistingCurlyBrace(){
-    myFixture.configureByText(ThriftFileType.INSTANCE, "service Foo {<caret>}");
-    myFixture.type('}');
-    myFixture.checkResult("service Foo {}<caret>");
+  @Test
+  public void testExistingCurlyBrace(){
+    getFixture().configureByText(ThriftFileType.INSTANCE, "service Foo {<caret>}");
+    getFixture().type('}');
+    getFixture().checkResult("service Foo {}<caret>");
   }
 }

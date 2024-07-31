@@ -1,10 +1,14 @@
 name: Run tests with Gradle
 
 on:  
-  push:
   pull_request:
     branches:
       - develop
+  push:
+    branches:
+      - develop
+    tags:
+      - '*'
 
 permissions:
   contents: read
@@ -14,14 +18,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'gradle'
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test --no-daemon
   publish:
     needs:
       - test
@@ -29,13 +33,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'gradle'
       - name: Publish plugin
-        run: ./gradlew :thrift:publishPlugin
+        run: ./gradlew :thrift:publishPlugin --no-daemon
         env:
           JETBRAINS_TOKEN: ${{ secrets.JETBRAINS_TOKEN }}        

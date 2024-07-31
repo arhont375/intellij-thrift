@@ -1,24 +1,16 @@
 <idea-plugin>
-  <id>com.intellij.plugins.thrift</id>
   <name>Thrift Support (fork)</name>
   <description><![CDATA[
     Support for Thrift language.
     <p>
-    This is the fork of <a href="https://plugins.jetbrains.com/plugin/7331-thrift-support">original Thrift plugin developed by @fkorotkov</a>.
+    This is the fork of the <a href="https://plugins.jetbrains.com/plugin/7331-thrift-support">original Thrift plugin developed by @fkorotkov</a>.
     ]]>
   </description>
-  <change-notes>
-    <![CDATA[
-      IntelliJ 2024.1 Support
-    ]]>
-  </change-notes>
   <vendor>@arhont375</vendor>
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.lang</depends>
-  <depends>com.intellij.modules.vcs</depends>
-  <depends>com.intellij.modules.xml</depends>
-  <depends>com.intellij.modules.xdebugger</depends>
+
   <depends optional="true" config-file="withJava.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="withScala.xml">org.intellij.scala</depends>
 
