@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij.platform")
+    id("org.jetbrains.intellij.platform.base")
     id("java")
 }
 

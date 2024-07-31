@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 public class NameDuplicatesTest extends ThriftInspectionTestBase {
   public NameDuplicatesTest() {
     super("inspections/duplicates/name", ThriftNameDuplicatesInspection.class);
-
   }
 
   @Test

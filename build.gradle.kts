@@ -2,20 +2,22 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.0.0-rc2" apply false
     id("java")
     id("idea")
 }
 
-idea {
-    module {
-        isDownloadSources = true
-        isDownloadJavadoc = true
-    }
-}
-
 subprojects {
     apply(plugin = "java")
+    apply(plugin = "idea")
+
+    idea {
+        module {
+            if (System.getenv("CI").toBoolean()) {
+                isDownloadSources = true
+                isDownloadJavadoc = true
+            }
+        }
+    }
 
     java {
         toolchain {

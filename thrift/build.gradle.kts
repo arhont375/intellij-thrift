@@ -39,6 +39,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 
+    implementation("org.awaitility:awaitility:4.2.1")
+
     intellijPlatform {
         create(project.property("ideaVersion") as String)
         bundledPlugins("com.intellij.java")
