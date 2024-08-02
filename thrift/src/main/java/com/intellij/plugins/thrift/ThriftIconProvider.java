@@ -3,13 +3,13 @@ package com.intellij.plugins.thrift;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.IconProvider;
 import com.intellij.openapi.util.Iconable;
+import com.intellij.plugins.thrift.icons.ThriftIcons;
 import com.intellij.plugins.thrift.lang.psi.*;
 import com.intellij.psi.PsiElement;
-import icons.ThriftIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 public class ThriftIconProvider extends IconProvider {
   @Nullable

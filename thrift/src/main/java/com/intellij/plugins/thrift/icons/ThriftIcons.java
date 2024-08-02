@@ -1,8 +1,8 @@
-package icons;
+package com.intellij.plugins.thrift.icons;
 
 import com.intellij.openapi.util.IconLoader;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 public class ThriftIcons {
   public static final Icon CONST = IconLoader.getIcon("/icons/const.png", ThriftIcons.class);

@@ -5,7 +5,7 @@ import com.intellij.facet.FacetType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.UnknownModuleType;
-import icons.ThriftIcons;
+import com.intellij.plugins.thrift.icons.ThriftIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

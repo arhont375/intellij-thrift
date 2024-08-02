@@ -11,6 +11,7 @@ import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.plugins.thrift.ThriftBundle;
+import com.intellij.plugins.thrift.icons.ThriftIcons;
 import com.intellij.plugins.thrift.index.ThriftDeclarationIndex;
 import com.intellij.plugins.thrift.index.ThriftSubDeclarationIndex;
 import com.intellij.plugins.thrift.lang.psi.ThriftDeclaration;
@@ -22,7 +23,6 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import icons.ThriftIcons;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
