@@ -23,7 +23,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle'
       - name: Run tests
         run: ./gradlew test --no-daemon
   publish:
@@ -32,6 +31,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v3    
       - name: Install markdown tool and generate change notes
         run: |
           sudo apt-get update
@@ -44,7 +44,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle'
       - name: Publish plugin
         run: ./gradlew :thrift:publishPlugin --no-daemon
         env:
