@@ -53,6 +53,7 @@ dependencies {
 
 intellijPlatform {
     val gitTag = System.getenv()["GITHUB_REF_NAME"] ?: ""
+    val resolvedChangeNotes = System.getenv()["CHANGE_NOTES"] ?: ""
 
     publishing {
         token = System.getenv()["JETBRAINS_TOKEN"] ?: ""
@@ -64,9 +65,7 @@ intellijPlatform {
     pluginConfiguration {
         version = gitTag
         id = "thrift-syntax-fork"
-        changeNotes = """
-            2024.2 EAP support
-        """.trimIndent()
+        changeNotes = resolvedChangeNotes
 
         ideaVersion {
             sinceBuild = project.property("ideaSinceVersion") as String
