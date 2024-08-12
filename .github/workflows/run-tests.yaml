@@ -36,7 +36,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install markdown
-          echo "CHANGE_NOTES=$(gh release view --json body --template "{{.body}}" $GITHUB_REF_NAME | markdown)" >> "$GITHUB_ENV"
+          {
+            echo 'CHANGE_NOTES<<EOF'
+            gh release view --json body --template "{{.body}}" $GITHUB_REF_NAME | markdown
+            echo EOF
+          } >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up JDK
