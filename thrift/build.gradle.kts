@@ -38,6 +38,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+    // See: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-faq.html#missing-opentest4j-dependency-in-test-framework
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
 
     implementation("org.awaitility:awaitility:4.2.1")
 
