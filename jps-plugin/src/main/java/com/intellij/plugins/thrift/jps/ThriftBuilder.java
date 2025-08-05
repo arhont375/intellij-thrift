@@ -2,7 +2,6 @@ package com.intellij.plugins.thrift.jps;
 
 import com.intellij.execution.process.BaseOSProcessHandler;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.plugins.thrift.config.ThriftCompilerOptions;
 import com.intellij.plugins.thrift.config.ThriftConfig;
 import com.intellij.plugins.thrift.config.target.Generator;
@@ -20,7 +19,7 @@ import org.jetbrains.jps.model.module.JpsModule;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -110,7 +109,7 @@ public class ThriftBuilder extends ModuleLevelBuilder {
         genCmdLine.add(g.getOptionsString());
         genCmdLine.add("-out");
 
-        final String path = new URL(g.getOutputDir()).getPath();
+        final String path = URI.create(g.getOutputDir()).getPath();
         genCmdLine.add(path);
         final File targetDir = new File(path);
 

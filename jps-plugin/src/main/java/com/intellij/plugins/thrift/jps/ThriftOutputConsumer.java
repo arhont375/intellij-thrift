@@ -1,7 +1,7 @@
 package com.intellij.plugins.thrift.jps;
 
-import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessListener;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.Key;
 import org.apache.commons.io.FileUtils;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author xBlackCat
  */
-class ThriftOutputConsumer extends ProcessAdapter {
+class ThriftOutputConsumer implements ProcessListener {
   final StringBuilder errOutput;
   final StringBuilder stdOutput;
   private final String fileName;

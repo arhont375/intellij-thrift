@@ -44,9 +44,8 @@ dependencies {
     implementation("org.awaitility:awaitility:4.2.1")
 
     intellijPlatform {
-        create(project.property("ideaVersion") as String)
+        create(IntelliJPlatformType.IntellijIdeaCommunity, project.property("ideaVersion") as String)
         bundledPlugins("com.intellij.java")
-        instrumentationTools()
 
         testFramework(TestFrameworkType.Plugin.Java)
     }
@@ -54,7 +53,7 @@ dependencies {
 
 
 intellijPlatform {
-    val gitTag = System.getenv()["GITHUB_REF_NAME"] ?: ""
+    val gitTag = System.getenv()["GITHUB_REF_NAME"] ?: "test"
     val resolvedChangeNotes = System.getenv()["CHANGE_NOTES"] ?: ""
 
     publishing {
@@ -73,6 +72,12 @@ intellijPlatform {
             sinceBuild = project.property("ideaSinceVersion") as String
             // Unset untilBuild version to declare compatibility outside of current major version
             untilBuild = provider { null }
+        }
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
         }
     }
 
