@@ -1,3 +1,5 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+
 plugins {
     id("org.jetbrains.intellij.platform.base")
     id("java")
@@ -18,9 +20,11 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        create(project.property("ideaVersion") as String)
+        val rawIdeaVersion = project.property("ideaVersion") as String
+        val ideaBuild = rawIdeaVersion.substringAfter("-", rawIdeaVersion)
+
+        create(IntelliJPlatformType.IntellijIdeaCommunity, ideaBuild)
         bundledPlugins("com.intellij.java")
-        instrumentationTools()
     }
 }
 

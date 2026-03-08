@@ -20,6 +20,7 @@ sourceSets {
 }
 
 val junitVersion: String by project
+val ideaVersion: String by project
 
 repositories {
     mavenCentral()
@@ -36,6 +37,7 @@ dependencies {
     testImplementation("junit:junit:4.13.1")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.26.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
     // See: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-faq.html#missing-opentest4j-dependency-in-test-framework
@@ -44,9 +46,10 @@ dependencies {
     implementation("org.awaitility:awaitility:4.2.1")
 
     intellijPlatform {
-        create(project.property("ideaVersion") as String)
+        val ideaBuild = ideaVersion.substringAfter("-", ideaVersion)
+        create(IntelliJPlatformType.IntellijIdeaCommunity, ideaBuild)
         bundledPlugins("com.intellij.java")
-        instrumentationTools()
+        javaCompiler()
 
         testFramework(TestFrameworkType.Plugin.Java)
     }
