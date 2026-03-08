@@ -36,7 +36,8 @@
                                    implementationClass="com.intellij.plugins.thrift.highlight.ThriftSyntaxHighlighterFactory"/>
     <annotator language="thrift" implementationClass="com.intellij.plugins.thrift.annotator.ThriftColorAnnotator"/>
     <annotator language="thrift" implementationClass="com.intellij.plugins.thrift.annotator.ThrowsAnnotator"/>
-    <!--<lang.formatter/>-->
+    <lang.formatter language="thrift" implementationClass="com.intellij.plugins.thrift.formatter.ThriftFormattingBuilderModel"/>
+    <lang.lineWrapPositionStrategy language="thrift" implementationClass="com.intellij.plugins.thrift.formatter.ThriftLineWrapPositionStrategy"/>
 
     <lang.foldingBuilder language="thrift" implementationClass="com.intellij.plugins.thrift.lang.ThriftFoldingBuilder"/>
 
@@ -48,9 +49,9 @@
     <liveTemplateContext implementation="com.intellij.plugins.thrift.ThriftContext" contextId="THRIFT"/>
 
     <!--<colorSettingsPage/>-->
-    <!--<codeStyleSettingsProvider/>-->
+    <codeStyleSettingsProvider implementation="com.intellij.plugins.thrift.formatter.ThriftCodeStyleSettingsProvider"/>
 
-    <!--<langCodeStyleSettingsProvider/>-->
+    <langCodeStyleSettingsProvider implementation="com.intellij.plugins.thrift.formatter.ThriftLanguageCodeStyleSettingsProvider"/>
 
     <quoteHandler fileType="Thrift" className="com.intellij.plugins.thrift.ThriftQuoteHandler"/>
 
